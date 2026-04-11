@@ -1,19 +1,19 @@
 :root {
-  --page-bg: radial-gradient(circle at 8% 4%, #ffe69c 0%, #ffd27b 25%, #f5c46d 55%, #f4edd3 100%);
-  --panel-bg: rgba(255, 251, 236, 0.9);
-  --panel-border: rgba(100, 76, 35, 0.18);
-  --panel-shadow: 0 16px 44px rgba(124, 91, 23, 0.12);
-  --header-bg: rgba(235, 209, 150, 0.45);
-  --slot-bg: rgba(255, 255, 255, 0.72);
-  --slot-border: rgba(111, 84, 27, 0.2);
-  --input-bg: rgba(255, 255, 255, 0.92);
-  --input-border: rgba(111, 84, 27, 0.24);
-  --accent-strong: #d14b13;
-  --accent-soft: rgba(209, 75, 19, 0.35);
-  --danger: #b12f2f;
-  --text-main: #312716;
-  --text-soft: #5b4e38;
-  --empty-text: #907d5d;
+  --page-bg: #f5f5f5;
+  --panel-bg: #ffffff;
+  --panel-border: #dddddd;
+  --panel-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  --header-bg: #f0f0f0;
+  --slot-bg: #ffffff;
+  --slot-border: #d6d6d6;
+  --input-bg: #ffffff;
+  --input-border: #cfcfcf;
+  --accent-strong: #222222;
+  --accent-soft: rgba(34, 34, 34, 0.24);
+  --danger: #b03030;
+  --text-main: #1f1f1f;
+  --text-soft: #5f5f5f;
+  --empty-text: #8a8a8a;
 
   font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
   font-size: 16px;

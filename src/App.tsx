@@ -182,12 +182,12 @@ function App() {
               </div>
             ))}
 
-            {PERIODS.map((period) => (
-              <div className="period-row" key={period}>
-                <div className="period-label" role="rowheader">
+            {PERIODS.flatMap((period) => {
+              return [
+                <div className="period-label" role="rowheader" key={`label-${period}`}>
                   {period}限
-                </div>
-                {DAYS.map((day) => {
+                </div>,
+                ...DAYS.map((day) => {
                   const key = slotKey(day.key, period)
                   const item = record[key]
                   return (
@@ -207,9 +207,9 @@ function App() {
                       )}
                     </button>
                   )
-                })}
-              </div>
-            ))}
+                }),
+              ]
+            })}
           </div>
         </section>
       )}

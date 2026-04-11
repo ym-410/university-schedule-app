@@ -34,6 +34,7 @@
 
 .schedule-grid {
   display: grid;
+  grid-template-columns: 90px repeat(5, minmax(120px, 1fr));
   gap: 8px;
 }
 
@@ -54,19 +55,9 @@
   color: var(--text-main);
 }
 
-.period-row {
-  display: grid;
-  grid-template-columns: 90px repeat(5, minmax(0, 1fr));
-  gap: 8px;
-}
-
 .schedule-grid > .corner,
 .schedule-grid > .day-header {
   min-height: 52px;
-}
-
-.schedule-grid {
-  grid-template-columns: 90px repeat(5, minmax(0, 1fr));
 }
 
 .slot {
@@ -185,9 +176,8 @@
     border-radius: 16px;
   }
 
-  .schedule-grid,
-  .period-row {
-    grid-template-columns: 58px repeat(5, minmax(0, 1fr));
+  .schedule-grid {
+    grid-template-columns: 58px repeat(5, minmax(72px, 1fr));
     gap: 6px;
   }
 
