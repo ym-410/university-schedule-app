@@ -34,7 +34,7 @@
 
 .schedule-grid {
   display: grid;
-  grid-template-columns: 90px repeat(5, minmax(120px, 1fr));
+  grid-template-columns: 50px repeat(5, minmax(120px, 1fr));
   gap: 8px;
 }
 
@@ -48,11 +48,31 @@
 
 .day-header,
 .period-label {
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: var(--header-bg);
   font-weight: 700;
   color: var(--text-main);
+  font-size: 13px;
+}
+
+.period-label {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+}
+
+.period-number {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.period-time {
+  font-size: 10px;
+  color: var(--text-soft);
 }
 
 .schedule-grid > .corner,
@@ -88,6 +108,16 @@
 .slot span {
   font-size: 12px;
   color: var(--text-soft);
+}
+
+.slot .location-badge {
+  font-size: 11px;
+  color: var(--text-soft);
+  background: rgba(0, 0, 0, 0.08);
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 2px;
 }
 
 .slot .empty {
@@ -177,7 +207,7 @@
   }
 
   .schedule-grid {
-    grid-template-columns: 58px repeat(5, minmax(72px, 1fr));
+    grid-template-columns: 35px repeat(5, minmax(72px, 1fr));
     gap: 6px;
   }
 
@@ -191,13 +221,107 @@
   }
 
   .slot span,
-  .period-label,
   .day-header {
-    font-size: 11px;
+    font-size: 10px;
+  }
+
+  .period-time {
+    font-size: 9px;
   }
 
   .detail-actions {
     display: grid;
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-shell {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .app-header {
+    margin-bottom: 4px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin: 0 0 4px;
+  }
+
+  .lead {
+    font-size: 13px;
+  }
+
+  .grid-panel,
+  .detail-panel {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .schedule-grid {
+    grid-template-columns: 32px repeat(5, minmax(50px, 1fr));
+    gap: 4px;
+  }
+
+  .corner,
+  .day-header,
+  .period-label,
+  .slot {
+    min-height: 80px;
+    border-radius: 8px;
+  }
+
+  .schedule-grid > .corner,
+  .schedule-grid > .day-header {
+    min-height: 50px;
+  }
+
+  .slot {
+    min-height: 80px;
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .slot strong {
+    font-size: 10px;
+  }
+
+  .slot span,
+  .day-header {
+    font-size: 9px;
+  }
+
+  .period-number {
+    font-size: 14px;
+  }
+
+  .period-time {
+    font-size: 8px;
+  }
+
+  .location-badge {
+    font-size: 8px;
+    padding: 3px 8px;
+  }
+
+  .field {
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .field span {
+    font-size: 12px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
