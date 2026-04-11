@@ -1,0 +1,213 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+}
+
+.app-header {
+  text-align: left;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+}
+
+.lead {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.grid-panel,
+.detail-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  box-shadow: var(--panel-shadow);
+  padding: 18px;
+}
+
+.schedule-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.corner,
+.day-header,
+.period-label,
+.slot {
+  min-height: 68px;
+  border-radius: 12px;
+}
+
+.day-header,
+.period-label {
+  display: grid;
+  place-items: center;
+  background: var(--header-bg);
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.period-row {
+  display: grid;
+  grid-template-columns: 90px repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.schedule-grid > .corner,
+.schedule-grid > .day-header {
+  min-height: 52px;
+}
+
+.schedule-grid {
+  grid-template-columns: 90px repeat(5, minmax(0, 1fr));
+}
+
+.slot {
+  border: 1px solid var(--slot-border);
+  background: var(--slot-bg);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease;
+}
+
+.slot:hover {
+  border-color: var(--accent-strong);
+  transform: translateY(-2px);
+}
+
+.slot strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.slot span {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.slot .empty {
+  color: var(--empty-text);
+}
+
+.detail-panel h2 {
+  margin: 0 0 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.field span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--input-bg);
+  box-sizing: border-box;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent-strong);
+}
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--accent-strong);
+}
+
+.btn-danger {
+  color: #fff;
+  background: var(--danger);
+}
+
+.btn-ghost {
+  color: var(--text-main);
+  background: var(--header-bg);
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .grid-panel,
+  .detail-panel {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .schedule-grid,
+  .period-row {
+    grid-template-columns: 58px repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .slot {
+    min-height: 58px;
+    padding: 8px;
+  }
+
+  .slot strong {
+    font-size: 12px;
+  }
+
+  .slot span,
+  .period-label,
+  .day-header {
+    font-size: 11px;
+  }
+
+  .detail-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
