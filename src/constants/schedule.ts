@@ -13,11 +13,11 @@ export const DAYS: Array<{ key: DayKey; label: string }> = [
 export const PERIODS = [1, 2, 3, 4, 5]
 
 export const TIME_SLOTS: Record<number, { start: string; end: string }> = {
-  1: { start: '09:00', end: '10:40' },
-  2: { start: '10:50', end: '12:30' },
-  3: { start: '13:20', end: '15:00' },
-  4: { start: '15:10', end: '16:50' },
-  5: { start: '17:00', end: '18:40' },
+  1: { start: '08:45', end: '10:15' },
+  2: { start: '10:30', end: '12:00' },
+  3: { start: '13:00', end: '14:30' },
+  4: { start: '14:45', end: '16:15' },
+  5: { start: '16:30', end: '18:00' },
 }
 
 export const COLOR_OPTIONS: Array<{ key: ScheduleColor; label: string }> = [
