@@ -254,23 +254,23 @@
 
 .slot-filled .location-badge {
   background: rgba(82, 128, 199, 0.2);
-  color: #244d7d;
+  color: #111;
 }
 
 .slot-color-mint.slot-filled .location-badge {
-  color: #2f6e56;
+  color: #111;
 }
 
 .slot-color-peach.slot-filled .location-badge {
-  color: #8a5638;
+  color: #111;
 }
 
 .slot-color-lavender.slot-filled .location-badge {
-  color: #674f93;
+  color: #111;
 }
 
 .slot-color-sand.slot-filled .location-badge {
-  color: #8a6b2d;
+  color: #111;
 }
 
 .slot:hover {
@@ -295,7 +295,7 @@
 .slot .location-badge {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-soft);
+  color: #111;
   background: rgba(56, 95, 135, 0.1);
   padding: 4px 10px;
   border-radius: 20px;
