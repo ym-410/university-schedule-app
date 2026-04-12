@@ -1,12 +1,15 @@
 .app-shell {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 28px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+  padding: 10px 12px;
+  height: 100svh;
+  overflow: hidden;
 }
 
 .app-header {
   text-align: left;
+  min-height: 0;
 }
 
 .eyebrow {
@@ -23,26 +26,36 @@
   color: var(--text-soft);
 }
 
-.grid-panel,
 .detail-panel {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: 20px;
   box-shadow: var(--panel-shadow);
   padding: 18px;
+  min-height: 0;
+}
+
+.grid-panel {
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .schedule-grid {
   display: grid;
   grid-template-columns: 50px repeat(5, minmax(120px, 1fr));
+  grid-template-rows: 44px repeat(7, minmax(0, 1fr));
   gap: 8px;
+  height: 100%;
+  width: 100%;
 }
 
 .corner,
 .day-header,
 .period-label,
 .slot {
-  min-height: 68px;
+  min-height: 0;
   border-radius: 12px;
 }
 
@@ -71,13 +84,20 @@
 }
 
 .period-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   font-size: 10px;
+  line-height: 1.05;
+  white-space: nowrap;
   color: var(--text-soft);
 }
 
 .schedule-grid > .corner,
 .schedule-grid > .day-header {
-  min-height: 52px;
+  min-height: 0;
 }
 
 .slot {
@@ -93,6 +113,20 @@
   padding: 10px 12px;
   cursor: pointer;
   transition: transform 0.16s ease, border-color 0.16s ease;
+}
+
+.slot-filled {
+  background: #eaf3ff;
+  border-color: #bdd6fb;
+}
+
+.slot-filled strong {
+  color: #365c8d;
+}
+
+.slot-filled .location-badge {
+  background: rgba(95, 140, 214, 0.18);
+  color: #365c8d;
 }
 
 .slot:hover {
@@ -196,11 +230,10 @@
 
 @media (max-width: 900px) {
   .app-shell {
-    padding: 16px;
-    gap: 14px;
+    padding: 8px 10px;
+    gap: 10px;
   }
 
-  .grid-panel,
   .detail-panel {
     padding: 12px;
     border-radius: 16px;
@@ -208,11 +241,11 @@
 
   .schedule-grid {
     grid-template-columns: 35px repeat(5, minmax(72px, 1fr));
+    grid-template-rows: 36px repeat(7, minmax(0, 1fr));
     gap: 6px;
   }
 
   .slot {
-    min-height: 58px;
     padding: 8px;
   }
 
@@ -237,29 +270,28 @@
 
 @media (max-width: 600px) {
   .app-shell {
-    padding: 12px;
-    gap: 12px;
+    padding: 6px 8px;
+    gap: 8px;
   }
 
   .app-header {
-    margin-bottom: 4px;
+    margin-bottom: 0;
   }
 
   .eyebrow {
-    font-size: 11px;
-    margin-bottom: 4px;
+    font-size: 10px;
+    margin-bottom: 2px;
   }
 
   h1 {
-    font-size: 18px;
-    margin: 0 0 4px;
+    font-size: 16px;
+    margin: 0;
   }
 
   .lead {
-    font-size: 13px;
+    font-size: 12px;
   }
 
-  .grid-panel,
   .detail-panel {
     padding: 10px;
     border-radius: 12px;
@@ -267,6 +299,7 @@
 
   .schedule-grid {
     grid-template-columns: 32px repeat(5, minmax(50px, 1fr));
+    grid-template-rows: 32px repeat(7, minmax(0, 1fr));
     gap: 4px;
   }
 
@@ -274,17 +307,15 @@
   .day-header,
   .period-label,
   .slot {
-    min-height: 80px;
     border-radius: 8px;
   }
 
   .schedule-grid > .corner,
   .schedule-grid > .day-header {
-    min-height: 50px;
+    min-height: 0;
   }
 
   .slot {
-    min-height: 80px;
     padding: 6px;
     gap: 4px;
   }
