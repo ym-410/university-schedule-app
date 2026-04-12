@@ -7,14 +7,51 @@ type ScheduleGridProps = {
   onOpenDetail: (day: DayKey, period: number) => void
 }
 
+function getTodayDayKey(): DayKey | null {
+  const dayIndex = new Date().getDay()
+  switch (dayIndex) {
+    case 1:
+      return 'mon'
+    case 2:
+      return 'tue'
+    case 3:
+      return 'wed'
+    case 4:
+      return 'thu'
+    case 5:
+      return 'fri'
+    default:
+      return null
+  }
+}
+
 export function ScheduleGrid({ record, onOpenDetail }: ScheduleGridProps) {
+  const todayDayKey = getTodayDayKey()
+
+  const getSlotClassName = (dayKey: DayKey, colorKey?: string) => {
+    const resolvedColorKey = colorKey ?? 'blue'
+    return [
+      'slot',
+      colorKey ? 'slot-filled' : '',
+      dayKey === todayDayKey ? 'slot-today' : '',
+      colorKey ? `slot-color-${resolvedColorKey}` : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
+  }
+
   return (
     <section className="grid-panel" aria-label="メイン画面">
       <div className="schedule-grid" role="grid" aria-label="時間割グリッド">
         <div className="corner" aria-hidden="true"></div>
         {DAYS.map((day) => (
-          <div key={day.key} className="day-header" role="columnheader">
-            {day.label}
+          <div
+            key={day.key}
+            className={day.key === todayDayKey ? 'day-header day-header-today' : 'day-header'}
+            role="columnheader"
+          >
+            <span className="day-label">{day.label}</span>
+            {day.key === todayDayKey && <span className="today-badge">今日</span>}
           </div>
         ))}
 
@@ -34,7 +71,7 @@ export function ScheduleGrid({ record, onOpenDetail }: ScheduleGridProps) {
               return (
                 <button
                   type="button"
-                  className={item ? 'slot slot-filled' : 'slot'}
+                  className={getSlotClassName(day.key, item?.color ?? undefined)}
                   key={key}
                   onClick={() => onOpenDetail(day.key, period)}
                 >
@@ -44,7 +81,7 @@ export function ScheduleGrid({ record, onOpenDetail }: ScheduleGridProps) {
                       {item.location && <span className="location-badge">{item.location}</span>}
                     </>
                   ) : (
-                    <span className="empty">未登録</span>
+                    <span className="empty" aria-hidden="true"></span>
                   )}
                 </button>
               )

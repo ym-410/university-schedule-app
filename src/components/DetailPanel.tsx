@@ -1,4 +1,5 @@
 import type { ScheduleItem } from '../types/schedule'
+import { COLOR_OPTIONS } from '../constants/schedule'
 
 type DetailPanelProps = {
   selectedLabel: string
@@ -47,6 +48,23 @@ export function DetailPanel({
           placeholder="例: レポート提出あり"
         />
       </label>
+
+      <div className="field">
+        <span>背景色</span>
+        <div className="color-options" role="radiogroup" aria-label="背景色を選択">
+          {COLOR_OPTIONS.map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              className={draft.color === option.key ? 'color-option color-option-selected' : 'color-option'}
+              onClick={() => onChange('color', option.key)}
+            >
+              <span className={`color-swatch color-swatch-${option.key}`} aria-hidden="true"></span>
+              <span>{option.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="detail-actions">
         <button className="btn btn-primary" onClick={onSave}>

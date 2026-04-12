@@ -1,19 +1,19 @@
 :root {
-  --page-bg: #f6f8fb;
+  --page-bg: #eef3f9;
   --panel-bg: #ffffff;
-  --panel-border: #e2e8f2;
-  --panel-shadow: 0 4px 14px rgba(35, 55, 90, 0.08);
-  --header-bg: #eef3fa;
-  --slot-bg: #ffffff;
-  --slot-border: #dbe4f0;
+  --panel-border: #d6dfeb;
+  --panel-shadow: 0 5px 16px rgba(35, 55, 90, 0.09);
+  --header-bg: #e2eaf4;
+  --slot-bg: #fbfcfe;
+  --slot-border: #ccd7e4;
   --input-bg: #ffffff;
-  --input-border: #d3ddea;
-  --accent-strong: #47658a;
-  --accent-soft: rgba(71, 101, 138, 0.26);
-  --danger: #c15b5b;
-  --text-main: #273240;
-  --text-soft: #647487;
-  --empty-text: #8a97a8;
+  --input-border: #c7d2df;
+  --accent-strong: #385f87;
+  --accent-soft: rgba(56, 95, 135, 0.28);
+  --danger: #b85c5c;
+  --text-main: #1f2c3a;
+  --text-soft: #55697d;
+  --empty-text: #7b8999;
 
   font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
   font-size: 16px;
@@ -36,8 +36,8 @@ body {
 
 #root {
   width: 100%;
-  max-width: none;
-  margin: 0;
+  max-width: 1240px;
+  margin: 0 auto;
   min-height: 100svh;
 }
 

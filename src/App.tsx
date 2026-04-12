@@ -26,7 +26,10 @@ function App() {
   const openDetail = (day: DayKey, period: number) => {
     const key = slotKey(day, period)
     setSelectedSlot(key)
-    setDraft(record[key] ?? EMPTY_ITEM)
+    setDraft({
+      ...EMPTY_ITEM,
+      ...(record[key] ?? {}),
+    })
   }
 
   const saveSlot = () => {
@@ -39,6 +42,7 @@ function App() {
         title: draft.title.trim(),
         location: draft.location.trim(),
         note: draft.note.trim(),
+        color: draft.color ?? EMPTY_ITEM.color,
       },
     }
     setRecord(next)

@@ -15,8 +15,8 @@
 .eyebrow {
   margin: 0 0 8px;
   letter-spacing: 0.14em;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
   color: var(--accent-strong);
   text-transform: uppercase;
 }
@@ -65,21 +65,46 @@
   justify-content: center;
   align-items: center;
   background: var(--header-bg);
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-main);
-  font-size: 13px;
+  font-size: 14px;
+}
+
+.day-header {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.day-header-today {
+  background: #d7e6f7;
+  border: 1px solid #93b3d6;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.day-label {
+  font-weight: 800;
+}
+
+.today-badge {
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  color: #2e5c8e;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 2px 6px;
+  border-radius: 999px;
 }
 
 .period-label {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .period-number {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   margin-bottom: 2px;
 }
 
@@ -89,7 +114,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.05;
   white-space: nowrap;
   color: var(--text-soft);
@@ -107,26 +132,75 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 6px;
-  text-align: left;
+  text-align: center;
   padding: 10px 12px;
   cursor: pointer;
   transition: transform 0.16s ease, border-color 0.16s ease;
 }
 
 .slot-filled {
-  background: #eaf3ff;
-  border-color: #bdd6fb;
+  background: #dfeeff;
+  border-color: #9fc2ea;
+}
+
+.slot-color-blue.slot-filled {
+  background: #dfeeff;
+  border-color: #9fc2ea;
+}
+
+.slot-color-mint.slot-filled {
+  background: #e2f4ec;
+  border-color: #a8d8c3;
+}
+
+.slot-color-peach.slot-filled {
+  background: #f7e8df;
+  border-color: #e0b59d;
+}
+
+.slot-color-lavender.slot-filled {
+  background: #ece3f8;
+  border-color: #c7b4e4;
+}
+
+.slot-color-sand.slot-filled {
+  background: #f6eedc;
+  border-color: #ddc58f;
+}
+
+.slot-today {
+  box-shadow: inset 0 0 0 1px rgba(56, 95, 135, 0.12);
 }
 
 .slot-filled strong {
-  color: #365c8d;
+  color: #244d7d;
 }
 
 .slot-filled .location-badge {
-  background: rgba(95, 140, 214, 0.18);
-  color: #365c8d;
+  background: rgba(82, 128, 199, 0.2);
+  color: #244d7d;
+}
+
+.slot-color-mint.slot-filled strong,
+.slot-color-mint.slot-filled .location-badge {
+  color: #2f6e56;
+}
+
+.slot-color-peach.slot-filled strong,
+.slot-color-peach.slot-filled .location-badge {
+  color: #8a5638;
+}
+
+.slot-color-lavender.slot-filled strong,
+.slot-color-lavender.slot-filled .location-badge {
+  color: #674f93;
+}
+
+.slot-color-sand.slot-filled strong,
+.slot-color-sand.slot-filled .location-badge {
+  color: #8a6b2d;
 }
 
 .slot:hover {
@@ -135,19 +209,23 @@
 }
 
 .slot strong {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
   line-height: 1.2;
+  text-align: center;
 }
 
 .slot span {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-soft);
 }
 
 .slot .location-badge {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--text-soft);
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(56, 95, 135, 0.1);
   padding: 4px 10px;
   border-radius: 20px;
   display: inline-block;
@@ -155,7 +233,9 @@
 }
 
 .slot .empty {
-  color: var(--empty-text);
+  display: block;
+  width: 100%;
+  min-height: 1em;
 }
 
 .detail-panel h2 {
@@ -170,8 +250,8 @@
 }
 
 .field span {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--text-main);
 }
 
@@ -189,6 +269,59 @@
 
 .field textarea {
   resize: vertical;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.color-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--panel-bg);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.color-option-selected {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.color-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  flex: 0 0 auto;
+}
+
+.color-swatch-blue {
+  background: #dfeeff;
+}
+
+.color-swatch-mint {
+  background: #e2f4ec;
+}
+
+.color-swatch-peach {
+  background: #f7e8df;
+}
+
+.color-swatch-lavender {
+  background: #ece3f8;
+}
+
+.color-swatch-sand {
+  background: #f6eedc;
 }
 
 .field input:focus,
@@ -209,7 +342,7 @@
   border-radius: 10px;
   padding: 10px 18px;
   font: inherit;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
 }
 
@@ -250,21 +383,30 @@
   }
 
   .slot strong {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .slot span,
   .day-header {
-    font-size: 10px;
+    font-size: 11px;
+  }
+
+  .today-badge {
+    font-size: 9px;
+    padding: 2px 5px;
   }
 
   .period-time {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .detail-actions {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .color-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -279,17 +421,17 @@
   }
 
   .eyebrow {
-    font-size: 10px;
+    font-size: 11px;
     margin-bottom: 2px;
   }
 
   h1 {
-    font-size: 16px;
+    font-size: 17px;
     margin: 0;
   }
 
   .lead {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .detail-panel {
@@ -321,24 +463,29 @@
   }
 
   .slot strong {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .slot span,
   .day-header {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .period-number {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .period-time {
+    font-size: 9px;
+  }
+
+  .today-badge {
     font-size: 8px;
+    padding: 2px 4px;
   }
 
   .location-badge {
-    font-size: 8px;
+    font-size: 9px;
     padding: 3px 8px;
   }
 
@@ -347,12 +494,22 @@
     margin-bottom: 10px;
   }
 
+  .color-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .color-option {
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
   .field span {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .btn {
     padding: 8px 12px;
-    font-size: 13px;
+    font-size: 14px;
   }
 }

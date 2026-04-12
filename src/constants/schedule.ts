@@ -1,4 +1,4 @@
-import type { DayKey, ScheduleItem } from '../types/schedule'
+import type { DayKey, ScheduleColor, ScheduleItem } from '../types/schedule'
 
 export const STORAGE_KEY = 'uni_schedule_record_v1'
 
@@ -20,8 +20,17 @@ export const TIME_SLOTS: Record<number, { start: string; end: string }> = {
   5: { start: '17:00', end: '18:40' },
 }
 
+export const COLOR_OPTIONS: Array<{ key: ScheduleColor; label: string }> = [
+  { key: 'blue', label: '青' },
+  { key: 'mint', label: '緑' },
+  { key: 'peach', label: '橙' },
+  { key: 'lavender', label: '紫' },
+  { key: 'sand', label: '黄' },
+]
+
 export const EMPTY_ITEM: ScheduleItem = {
   title: '',
   location: '',
   note: '',
+  color: 'blue',
 }
