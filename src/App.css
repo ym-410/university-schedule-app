@@ -45,7 +45,7 @@
 .schedule-grid {
   display: grid;
   grid-template-columns: 50px repeat(5, minmax(120px, 1fr));
-  grid-template-rows: 44px repeat(7, minmax(0, 1fr));
+  grid-template-rows: 44px repeat(5, minmax(0, 1fr));
   gap: 8px;
   height: 100%;
   width: 100%;
@@ -241,7 +241,7 @@
 
   .schedule-grid {
     grid-template-columns: 35px repeat(5, minmax(72px, 1fr));
-    grid-template-rows: 36px repeat(7, minmax(0, 1fr));
+    grid-template-rows: 36px repeat(5, minmax(0, 1fr));
     gap: 6px;
   }
 
@@ -299,7 +299,7 @@
 
   .schedule-grid {
     grid-template-columns: 32px repeat(5, minmax(50px, 1fr));
-    grid-template-rows: 32px repeat(7, minmax(0, 1fr));
+    grid-template-rows: 32px repeat(5, minmax(0, 1fr));
     gap: 4px;
   }
 

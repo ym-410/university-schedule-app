@@ -10,7 +10,7 @@ export const DAYS: Array<{ key: DayKey; label: string }> = [
   { key: 'fri', label: '金' },
 ]
 
-export const PERIODS = [1, 2, 3, 4, 5, 6, 7]
+export const PERIODS = [1, 2, 3, 4, 5]
 
 export const TIME_SLOTS: Record<number, { start: string; end: string }> = {
   1: { start: '09:00', end: '10:40' },
@@ -18,8 +18,6 @@ export const TIME_SLOTS: Record<number, { start: string; end: string }> = {
   3: { start: '13:20', end: '15:00' },
   4: { start: '15:10', end: '16:50' },
   5: { start: '17:00', end: '18:40' },
-  6: { start: '18:50', end: '20:30' },
-  7: { start: '20:40', end: '22:20' },
 }
 
 export const EMPTY_ITEM: ScheduleItem = {
