@@ -271,12 +271,8 @@ function App() {
   const handleGoogleSignIn = async () => {
     setIsAuthBusy(true)
     try {
-      const result = await signInWithGoogle()
-      if (result.mode === 'redirect') {
-        setSyncMessage('ポップアップが使えないため、Google認証ページへ移動します')
-        return
-      }
-      setSyncMessage('Googleログイン完了。クラウドへ接続中')
+      await signInWithGoogle()
+      setSyncMessage('Google認証ページへ移動します')
     } catch (error) {
       setSyncMessage(getAuthErrorMessage(error))
     } finally {

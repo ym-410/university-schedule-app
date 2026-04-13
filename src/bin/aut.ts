@@ -2,7 +2,6 @@ import {
 	getRedirectResult,
 	GoogleAuthProvider,
 	onAuthStateChanged,
-	signInWithPopup,
 	signInWithRedirect,
 	signOut,
 	type AuthError,
@@ -16,13 +15,7 @@ googleProvider.setCustomParameters({
 })
 
 function shouldUseRedirectSignIn() {
-	if (typeof window === 'undefined') {
-		return false
-	}
-
-	const mobileLikeDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
-	const standaloneMode = window.matchMedia('(display-mode: standalone)').matches
-	return mobileLikeDevice || standaloneMode
+	return true
 }
 
 export function watchAuthState(listener: (user: User | null) => void) {
@@ -35,25 +28,6 @@ export async function signInWithGoogle() {
 	}
 
 	if (shouldUseRedirectSignIn()) {
-		await signInWithRedirect(auth, googleProvider)
-		return { mode: 'redirect' as const, user: null }
-	}
-
-	try {
-		const credential = await signInWithPopup(auth, googleProvider)
-		return { mode: 'popup' as const, user: credential.user }
-	} catch (error) {
-		const code = (error as Partial<AuthError>).code
-		const shouldUseRedirect =
-			code === 'auth/popup-blocked' ||
-			code === 'auth/popup-closed-by-user' ||
-			code === 'auth/cancelled-popup-request' ||
-			code === 'auth/operation-not-supported-in-this-environment'
-
-		if (!shouldUseRedirect) {
-			throw error
-		}
-
 		await signInWithRedirect(auth, googleProvider)
 		return { mode: 'redirect' as const, user: null }
 	}
