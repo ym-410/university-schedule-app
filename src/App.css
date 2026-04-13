@@ -9,11 +9,31 @@
 
 .app-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
   text-align: left;
   min-height: 0;
+}
+
+.auth-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.btn-google {
+  border: 1px solid #d5dae5;
+  background: #fff;
+  color: #1f2c3a;
+  font-weight: 800;
+  box-shadow: 0 6px 14px rgba(35, 55, 90, 0.12);
+}
+
+.btn-google:hover:not(:disabled) {
+  border-color: #b7c4d8;
+  transform: translateY(-1px);
 }
 
 .eyebrow {
@@ -444,6 +464,11 @@
     gap: 8px;
   }
 
+  .auth-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
   .menu-panel {
     grid-template-columns: 1fr;
   }
@@ -499,6 +524,10 @@
 
   .app-header {
     margin-bottom: 0;
+  }
+
+  .auth-actions .btn {
+    width: 100%;
   }
 
   .bottom-nav .btn {

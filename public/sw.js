@@ -1,6 +1,28 @@
 const CACHE_NAME = 'uni-schedule-v2'
 const PRECACHE_URLS = ['/', '/index.html', '/manifest.webmanifest']
 
+function isHttpRequest(url) {
+  return url.protocol === 'http:' || url.protocol === 'https:'
+}
+
+function safeCachePut(request, response) {
+  const requestUrl = new URL(request.url)
+  if (!isHttpRequest(requestUrl)) {
+    return
+  }
+
+  const responseUrl = response.url ? new URL(response.url) : requestUrl
+  if (!isHttpRequest(responseUrl)) {
+    return
+  }
+
+  caches.open(CACHE_NAME).then((cache) => {
+    cache.put(request, response).catch(() => {
+      // Ignore cache write failures for unsupported or transient responses.
+    })
+  })
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -23,6 +45,10 @@ self.addEventListener('fetch', (event) => {
   }
 
   const requestUrl = new URL(event.request.url)
+  if (!isHttpRequest(requestUrl)) {
+    return
+  }
+
   const isNavigationRequest = event.request.mode === 'navigate'
   const isAppShellRequest = requestUrl.origin === self.location.origin && (requestUrl.pathname === '/' || requestUrl.pathname === '/index.html' || requestUrl.pathname === '/manifest.webmanifest')
 
@@ -31,9 +57,7 @@ self.addEventListener('fetch', (event) => {
       fetch(event.request)
         .then((response) => {
           const copy = response.clone()
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, copy)
-          })
+          safeCachePut(event.request, copy)
           return response
         })
         .catch(() => caches.match(event.request).then((cached) => cached ?? caches.match('/index.html'))),
@@ -49,9 +73,7 @@ self.addEventListener('fetch', (event) => {
       return fetch(event.request)
         .then((response) => {
           const copy = response.clone()
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, copy)
-          })
+          safeCachePut(event.request, copy)
           return response
         })
         .catch(() => caches.match('/index.html'))

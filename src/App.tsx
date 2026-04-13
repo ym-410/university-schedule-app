@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import './App.css'
 import { ScheduleGrid } from './components/ScheduleGrid'
 import { DetailPanel } from './components/DetailPanel'
 import { EMPTY_ITEM } from './constants/schedule'
 import type { DayKey, ScheduleItem, ScheduleRecord } from './types/schedule'
+import { signInWithGoogle, signOutCurrentUser, watchAuthState } from './bin/aut'
 import {
   createExportPayload,
   downloadRecordJson,
@@ -13,6 +14,7 @@ import {
   saveRecord,
   slotKey,
 } from './utils/scheduleStorage'
+import { subscribeUserSchedule, upsertUserScheduleRecord } from './utils/scheduleCloud'
 
 type AppPage = 'menu' | 'schedule' | 'data'
 
@@ -23,10 +25,105 @@ function App() {
   const [page, setPage] = useState<AppPage>('schedule')
   const [dataMessage, setDataMessage] = useState('')
   const [importText, setImportText] = useState('')
+  const [uid, setUid] = useState<string | null>(null)
+  const [syncMessage, setSyncMessage] = useState('ローカルデータを表示中')
+  const [isAuthBusy, setIsAuthBusy] = useState(false)
+  const [userLabel, setUserLabel] = useState('')
+
+  const isApplyingRemoteRecordRef = useRef(false)
+  const lastSyncedTextRef = useRef(JSON.stringify(record))
 
   useEffect(() => {
     saveRecord(record)
   }, [record])
+
+  useEffect(() => {
+    const unsubscribe = watchAuthState((user) => {
+      if (!user) {
+        setUid(null)
+        setUserLabel('')
+        setSyncMessage('Googleログインでクラウド同期。未ログイン時はローカル利用')
+        return
+      }
+
+      const label = user.displayName || user.email || 'Googleユーザー'
+      setUid(user.uid)
+      setUserLabel(label)
+      setSyncMessage('Google認証済み。クラウドと同期中')
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!uid) {
+      return
+    }
+
+    const unsubscribe = subscribeUserSchedule(
+      uid,
+      (cloudRecord, fromCache) => {
+        if (!cloudRecord) {
+          setSyncMessage(fromCache ? 'クラウド未作成。ローカルデータ表示中' : 'クラウド初期化待ち')
+          return
+        }
+
+        const serialized = JSON.stringify(cloudRecord)
+        if (serialized === lastSyncedTextRef.current) {
+          setSyncMessage(fromCache ? 'ローカルキャッシュから表示中' : 'クラウドと同期済み')
+          return
+        }
+
+        isApplyingRemoteRecordRef.current = true
+        lastSyncedTextRef.current = serialized
+        setRecord(cloudRecord)
+        queueMicrotask(() => {
+          isApplyingRemoteRecordRef.current = false
+        })
+        setSyncMessage(fromCache ? 'キャッシュを復元して表示中' : 'クラウド最新データを反映')
+      },
+      () => {
+        setSyncMessage('クラウド取得失敗。ローカルデータ表示中')
+      },
+    )
+
+    return () => {
+      unsubscribe()
+    }
+  }, [uid])
+
+  useEffect(() => {
+    if (!uid || isApplyingRemoteRecordRef.current) {
+      return
+    }
+
+    const serialized = JSON.stringify(record)
+    if (serialized === lastSyncedTextRef.current) {
+      return
+    }
+
+    let isCancelled = false
+    upsertUserScheduleRecord(uid, record)
+      .then(() => {
+        if (isCancelled) {
+          return
+        }
+        lastSyncedTextRef.current = serialized
+        setSyncMessage('クラウドへ保存済み')
+      })
+      .catch(() => {
+        if (isCancelled) {
+          return
+        }
+        setSyncMessage('クラウド保存失敗。ローカルには保存済み')
+      })
+
+    return () => {
+      isCancelled = true
+    }
+  }, [record, uid])
 
   const selectedLabel = useMemo(() => {
     if (!selectedSlot) {
@@ -140,12 +237,49 @@ function App() {
     setDataMessage('')
   }
 
+  const handleSignOut = async () => {
+    setIsAuthBusy(true)
+    try {
+      await signOutCurrentUser()
+      setSyncMessage('ログアウトしました。ローカルデータ表示中')
+    } catch {
+      setSyncMessage('ログアウトに失敗しました')
+    } finally {
+      setIsAuthBusy(false)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    setIsAuthBusy(true)
+    try {
+      await signInWithGoogle()
+      setSyncMessage('Googleログイン完了。クラウドへ接続中')
+    } catch {
+      setSyncMessage('Googleログインに失敗しました')
+    } finally {
+      setIsAuthBusy(false)
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="app-header">
         <div>
           <p className="eyebrow">Campus Flow</p>
           <h1>大学予定管理アプリ</h1>
+          <p className="lead">{syncMessage}</p>
+          <p className="lead">{uid ? `ログイン中: ${userLabel}` : '未ログイン'}</p>
+        </div>
+        <div className="auth-actions">
+          {!uid ? (
+            <button type="button" className="btn btn-google" onClick={handleGoogleSignIn} disabled={isAuthBusy}>
+              {isAuthBusy ? '処理中...' : 'Googleでログイン'}
+            </button>
+          ) : (
+            <button type="button" className="btn btn-ghost" onClick={handleSignOut} disabled={isAuthBusy}>
+              {isAuthBusy ? '処理中...' : 'ログアウト'}
+            </button>
+          )}
         </div>
       </header>
 
