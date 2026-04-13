@@ -4,7 +4,13 @@ import { ScheduleGrid } from './components/ScheduleGrid'
 import { DetailPanel } from './components/DetailPanel'
 import { EMPTY_ITEM } from './constants/schedule'
 import type { DayKey, ScheduleItem, ScheduleRecord } from './types/schedule'
-import { signInWithGoogle, signOutCurrentUser, watchAuthState } from './bin/aut'
+import {
+  consumeGoogleRedirectResult,
+  getAuthErrorMessage,
+  signInWithGoogle,
+  signOutCurrentUser,
+  watchAuthState,
+} from './bin/aut'
 import {
   createExportPayload,
   downloadRecordJson,
@@ -55,6 +61,19 @@ function App() {
     return () => {
       unsubscribe()
     }
+  }, [])
+
+  useEffect(() => {
+    consumeGoogleRedirectResult()
+      .then((user) => {
+        if (!user) {
+          return
+        }
+        setSyncMessage('Googleログイン完了。クラウド同期を開始します')
+      })
+      .catch((error) => {
+        setSyncMessage(getAuthErrorMessage(error))
+      })
   }, [])
 
   useEffect(() => {
@@ -252,10 +271,14 @@ function App() {
   const handleGoogleSignIn = async () => {
     setIsAuthBusy(true)
     try {
-      await signInWithGoogle()
+      const result = await signInWithGoogle()
+      if (result.mode === 'redirect') {
+        setSyncMessage('ポップアップが使えないため、Google認証ページへ移動します')
+        return
+      }
       setSyncMessage('Googleログイン完了。クラウドへ接続中')
-    } catch {
-      setSyncMessage('Googleログインに失敗しました')
+    } catch (error) {
+      setSyncMessage(getAuthErrorMessage(error))
     } finally {
       setIsAuthBusy(false)
     }
@@ -270,17 +293,6 @@ function App() {
           <p className="lead">{syncMessage}</p>
           <p className="lead">{uid ? `ログイン中: ${userLabel}` : '未ログイン'}</p>
         </div>
-        <div className="auth-actions">
-          {!uid ? (
-            <button type="button" className="btn btn-google" onClick={handleGoogleSignIn} disabled={isAuthBusy}>
-              {isAuthBusy ? '処理中...' : 'Googleでログイン'}
-            </button>
-          ) : (
-            <button type="button" className="btn btn-ghost" onClick={handleSignOut} disabled={isAuthBusy}>
-              {isAuthBusy ? '処理中...' : 'ログアウト'}
-            </button>
-          )}
-        </div>
       </header>
 
       {page === 'menu' && (
@@ -293,6 +305,27 @@ function App() {
             <strong>データ管理(JSON)</strong>
             <span>JSON出力・JSONインポート</span>
           </button>
+          {!uid ? (
+            <button
+              type="button"
+              className="menu-card menu-auth-card"
+              onClick={handleGoogleSignIn}
+              disabled={isAuthBusy}
+            >
+              <strong>{isAuthBusy ? '処理中...' : 'Googleログイン'}</strong>
+              <span>ログインしてクラウド同期を有効化</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="menu-card menu-auth-card"
+              onClick={handleSignOut}
+              disabled={isAuthBusy}
+            >
+              <strong>{isAuthBusy ? '処理中...' : 'ログアウト'}</strong>
+              <span>ローカル表示モードへ戻す</span>
+            </button>
+          )}
         </section>
       )}
 

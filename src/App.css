@@ -91,6 +91,10 @@
   color: var(--text-soft);
 }
 
+.menu-auth-card {
+  border-style: dashed;
+}
+
 .data-panel {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
