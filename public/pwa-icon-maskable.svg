@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#111111" />
-  <rect x="64" y="64" width="384" height="384" rx="90" fill="#f6f9fd" />
-  <g fill="#111111" font-family="'Noto Sans JP', sans-serif" text-anchor="middle">
-    <text x="256" y="222" font-size="68" font-weight="800">Campus</text>
-    <text x="256" y="306" font-size="112" font-weight="900">5限</text>
-  </g>
-</svg>
