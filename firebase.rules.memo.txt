@@ -1,0 +1,14 @@
+Firestore ルール貼り付け先:
+Firebase Console -> Firestore Database -> ルール
+
+このプロジェクトの保存先:
+users/{uid}/schedules/main
+
+ルールファイル:
+- firestore.rules
+- firestore.rules.copy.txt
+
+注意:
+- Google認証を使うため、Authentication で Google プロバイダを有効化してください。
+- 承認済みドメインに localhost を追加してください（開発時）。
+- ルール反映後に Publish を押してください。
