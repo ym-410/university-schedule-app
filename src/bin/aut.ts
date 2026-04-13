@@ -15,6 +15,16 @@ googleProvider.setCustomParameters({
 	prompt: 'select_account',
 })
 
+function shouldUseRedirectSignIn() {
+	if (typeof window === 'undefined') {
+		return false
+	}
+
+	const mobileLikeDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+	const standaloneMode = window.matchMedia('(display-mode: standalone)').matches
+	return mobileLikeDevice || standaloneMode
+}
+
 export function watchAuthState(listener: (user: User | null) => void) {
 	return onAuthStateChanged(auth, listener)
 }
@@ -22,6 +32,11 @@ export function watchAuthState(listener: (user: User | null) => void) {
 export async function signInWithGoogle() {
 	if (auth.currentUser) {
 		return { mode: 'already-signed-in' as const, user: auth.currentUser }
+	}
+
+	if (shouldUseRedirectSignIn()) {
+		await signInWithRedirect(auth, googleProvider)
+		return { mode: 'redirect' as const, user: null }
 	}
 
 	try {
