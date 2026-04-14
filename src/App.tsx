@@ -20,7 +20,7 @@ import {
   saveRecord,
   slotKey,
 } from './utils/scheduleStorage'
-import { subscribeUserSchedule, upsertUserScheduleRecord } from './utils/scheduleCloud'
+import { deleteUserScheduleSlot, subscribeUserSchedule, upsertUserScheduleRecord } from './utils/scheduleCloud'
 
 type AppPage = 'menu' | 'schedule' | 'data'
 
@@ -187,10 +187,23 @@ function App() {
     if (!selectedSlot) {
       return
     }
+    const targetSlot = selectedSlot
     const next = { ...record }
-    delete next[selectedSlot]
+    delete next[targetSlot]
     setRecord(next)
     setSelectedSlot(null)
+
+    if (!uid) {
+      return
+    }
+
+    deleteUserScheduleSlot(uid, targetSlot)
+      .then(() => {
+        setSyncMessage('クラウド上の予定を削除しました')
+      })
+      .catch(() => {
+        setSyncMessage('クラウド削除に失敗。再同期を試行します')
+      })
   }
 
   const closeDetail = () => {
