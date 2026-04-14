@@ -2,9 +2,11 @@ import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore'
 
+const authDomainFromEnv = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN
+
 const firebaseConfig = {
   apiKey: 'AIzaSyB5ZcrphkR6qbJqYRAGY1sHHYpmklEQB0s',
-  authDomain: 'uni-schedule-861dc.firebaseapp.com',
+  authDomain: authDomainFromEnv || 'uni-schedule-861dc.firebaseapp.com',
   projectId: 'uni-schedule-861dc',
   storageBucket: 'uni-schedule-861dc.firebasestorage.app',
   messagingSenderId: '784800330330',

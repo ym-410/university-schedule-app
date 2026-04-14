@@ -40,6 +40,7 @@ export async function consumeGoogleRedirectResult() {
 
 export function getAuthErrorMessage(error: unknown) {
 	const code = (error as Partial<AuthError>)?.code
+	const message = (error as Partial<AuthError>)?.message
 
 	if (code === 'auth/unauthorized-domain') {
 		return 'OAuthドメイン未許可です。Firebase Consoleで127.0.0.1/localhostをAuthorized domainsに追加してください。'
@@ -52,6 +53,14 @@ export function getAuthErrorMessage(error: unknown) {
 	}
 	if (code === 'auth/network-request-failed') {
 		return 'ネットワークエラーでログインに失敗しました。通信を確認してください。'
+	}
+
+	if (code) {
+		return `Googleログインに失敗しました (${code})`
+	}
+
+	if (message) {
+		return `Googleログインに失敗しました (${message})`
 	}
 
 	return 'Googleログインに失敗しました'
