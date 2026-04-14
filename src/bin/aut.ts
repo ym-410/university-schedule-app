@@ -35,10 +35,6 @@ export function watchAuthState(listener: (user: User | null) => void) {
 	return onAuthStateChanged(auth, listener)
 }
 
-function shouldPreferRedirect() {
-	return isStandaloneMode()
-}
-
 function shouldFallbackToRedirect(code?: string) {
 	return (
 		code === 'auth/popup-blocked' ||
@@ -47,11 +43,6 @@ function shouldFallbackToRedirect(code?: string) {
 		code === 'auth/operation-not-supported-in-this-environment'
 	)
 }
-
-function shouldFallbackToPopup(code?: string) {
-	return code === 'auth/operation-not-supported-in-this-environment' || code === 'auth/invalid-app-credential'
-}
-
 export async function signInWithGoogle() {
 	if (auth.currentUser) {
 		return { mode: 'already-signed-in' as const, user: auth.currentUser }
@@ -60,17 +51,8 @@ export async function signInWithGoogle() {
 	if (isInAppBrowser()) {
 		throw { code: 'auth/in-app-browser-unsupported' }
 	}
-
-	if (shouldPreferRedirect()) {
-		try {
-			await signInWithRedirect(auth, googleProvider)
-			return { mode: 'redirect' as const, user: null }
-		} catch (error) {
-			const code = (error as Partial<AuthError>).code
-			if (!shouldFallbackToPopup(code)) {
-				throw error
-			}
-		}
+	if (isStandaloneMode()) {
+		throw { code: 'auth/pwa-standalone-unsupported' }
 	}
 
 	try {
@@ -110,6 +92,9 @@ export function getAuthErrorMessage(error: unknown) {
 	}
 	if (code === 'auth/in-app-browser-unsupported') {
 		return 'アプリ内ブラウザではログインできません。Safari/Chrome本体でページを開いてください。'
+	}
+	if (code === 'auth/pwa-standalone-unsupported') {
+		return 'PWAアプリ内ではGoogleログインできません。ブラウザでこのページを開いてログインしてください。'
 	}
 	if (code === 'auth/invalid-api-key') {
 		return 'Firebase APIキーが無効です。環境変数 VITE_FIREBASE_API_KEY を確認してください。'

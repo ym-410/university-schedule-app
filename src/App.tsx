@@ -35,6 +35,7 @@ function App() {
   const [syncMessage, setSyncMessage] = useState('ローカルデータを表示中')
   const [isAuthBusy, setIsAuthBusy] = useState(false)
   const [userLabel, setUserLabel] = useState('')
+  const [isStandaloneMode, setIsStandaloneMode] = useState(false)
 
   const isApplyingRemoteRecordRef = useRef(false)
   const lastSyncedTextRef = useRef(JSON.stringify(record))
@@ -44,6 +45,10 @@ function App() {
   }, [record])
 
   useEffect(() => {
+    const standaloneMedia = window.matchMedia('(display-mode: standalone)').matches
+    const iosStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true
+    setIsStandaloneMode(standaloneMedia || iosStandalone)
+
     const unsubscribe = watchAuthState((user) => {
       if (!user) {
         setUid(null)
@@ -269,6 +274,12 @@ function App() {
   }
 
   const handleGoogleSignIn = async () => {
+    if (isStandaloneMode) {
+      window.open(window.location.href, '_blank', 'noopener,noreferrer')
+      setSyncMessage('外部ブラウザを開いてログインしてください')
+      return
+    }
+
     setIsAuthBusy(true)
     try {
       await signInWithGoogle()
@@ -308,8 +319,12 @@ function App() {
               onClick={handleGoogleSignIn}
               disabled={isAuthBusy}
             >
-              <strong>{isAuthBusy ? '処理中...' : 'Googleログイン'}</strong>
-              <span>ログインしてクラウド同期を有効化</span>
+              <strong>
+                {isAuthBusy ? '処理中...' : isStandaloneMode ? 'ブラウザで開いてログイン' : 'Googleログイン'}
+              </strong>
+              <span>
+                {isStandaloneMode ? 'PWAでは認証不可。外部ブラウザへ移動' : 'ログインしてクラウド同期を有効化'}
+              </span>
             </button>
           ) : (
             <button
