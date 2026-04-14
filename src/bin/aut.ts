@@ -2,6 +2,7 @@ import {
 	getRedirectResult,
 	GoogleAuthProvider,
 	onAuthStateChanged,
+	signInWithPopup,
 	signInWithRedirect,
 	signOut,
 	type AuthError,
@@ -14,12 +15,41 @@ googleProvider.setCustomParameters({
 	prompt: 'select_account',
 })
 
-function shouldUseRedirectSignIn() {
-	return true
+function isStandaloneMode() {
+	if (typeof window === 'undefined') {
+		return false
+	}
+	const mediaStandalone = window.matchMedia('(display-mode: standalone)').matches
+	const iosStandalone = (window.navigator as Navigator & { standalone?: boolean }).standalone === true
+	return mediaStandalone || iosStandalone
+}
+
+function isInAppBrowser() {
+	if (typeof navigator === 'undefined') {
+		return false
+	}
+	return /FBAN|FBAV|Instagram|Line|Twitter|wv\)|WebView/i.test(navigator.userAgent)
 }
 
 export function watchAuthState(listener: (user: User | null) => void) {
 	return onAuthStateChanged(auth, listener)
+}
+
+function shouldPreferRedirect() {
+	return isStandaloneMode()
+}
+
+function shouldFallbackToRedirect(code?: string) {
+	return (
+		code === 'auth/popup-blocked' ||
+		code === 'auth/popup-closed-by-user' ||
+		code === 'auth/cancelled-popup-request' ||
+		code === 'auth/operation-not-supported-in-this-environment'
+	)
+}
+
+function shouldFallbackToPopup(code?: string) {
+	return code === 'auth/operation-not-supported-in-this-environment' || code === 'auth/invalid-app-credential'
 }
 
 export async function signInWithGoogle() {
@@ -27,7 +57,31 @@ export async function signInWithGoogle() {
 		return { mode: 'already-signed-in' as const, user: auth.currentUser }
 	}
 
-	if (shouldUseRedirectSignIn()) {
+	if (isInAppBrowser()) {
+		throw { code: 'auth/in-app-browser-unsupported' }
+	}
+
+	if (shouldPreferRedirect()) {
+		try {
+			await signInWithRedirect(auth, googleProvider)
+			return { mode: 'redirect' as const, user: null }
+		} catch (error) {
+			const code = (error as Partial<AuthError>).code
+			if (!shouldFallbackToPopup(code)) {
+				throw error
+			}
+		}
+	}
+
+	try {
+		const credential = await signInWithPopup(auth, googleProvider)
+		return { mode: 'popup' as const, user: credential.user }
+	} catch (error) {
+		const code = (error as Partial<AuthError>).code
+		if (!shouldFallbackToRedirect(code)) {
+			throw error
+		}
+
 		await signInWithRedirect(auth, googleProvider)
 		return { mode: 'redirect' as const, user: null }
 	}
@@ -53,6 +107,18 @@ export function getAuthErrorMessage(error: unknown) {
 	}
 	if (code === 'auth/network-request-failed') {
 		return 'ネットワークエラーでログインに失敗しました。通信を確認してください。'
+	}
+	if (code === 'auth/in-app-browser-unsupported') {
+		return 'アプリ内ブラウザではログインできません。Safari/Chrome本体でページを開いてください。'
+	}
+	if (code === 'auth/invalid-api-key') {
+		return 'Firebase APIキーが無効です。環境変数 VITE_FIREBASE_API_KEY を確認してください。'
+	}
+	if (code === 'auth/invalid-app-credential') {
+		return 'アプリ認証情報が無効です。Firebase設定値（apiKey/authDomain/appId）の整合を確認してください。'
+	}
+	if (code === 'auth/operation-not-allowed') {
+		return 'Firebase AuthenticationでGoogleプロバイダが無効です。Sign-in methodを確認してください。'
 	}
 
 	if (code) {

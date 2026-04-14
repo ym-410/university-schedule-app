@@ -1,4 +1,4 @@
-const CACHE_NAME = 'uni-schedule-v2'
+const CACHE_NAME = 'uni-schedule-v3'
 const PRECACHE_URLS = ['/', '/index.html', '/manifest.webmanifest']
 
 function isHttpRequest(url) {
@@ -8,6 +8,15 @@ function isHttpRequest(url) {
 function safeCachePut(request, response) {
   const requestUrl = new URL(request.url)
   if (!isHttpRequest(requestUrl)) {
+    return
+  }
+  if (requestUrl.origin !== self.location.origin) {
+    return
+  }
+  if (requestUrl.pathname.startsWith('/__/auth/')) {
+    return
+  }
+  if (!response.ok) {
     return
   }
 
@@ -46,6 +55,12 @@ self.addEventListener('fetch', (event) => {
 
   const requestUrl = new URL(event.request.url)
   if (!isHttpRequest(requestUrl)) {
+    return
+  }
+  if (requestUrl.origin !== self.location.origin) {
+    return
+  }
+  if (requestUrl.pathname.startsWith('/__/auth/')) {
     return
   }
 
