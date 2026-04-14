@@ -1,4 +1,4 @@
-import { doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
+import { deleteField, doc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../bin/firebase'
 import type { ScheduleRecord } from '../types/schedule'
 
@@ -41,6 +41,12 @@ export async function upsertUserScheduleRecord(uid: string, record: ScheduleReco
       record,
       updatedAt: serverTimestamp(),
     },
-    { merge: true },
   )
+}
+
+export async function deleteUserScheduleSlot(uid: string, slotKey: string) {
+  await updateDoc(scheduleDocRef(uid), {
+    [`record.${slotKey}`]: deleteField(),
+    updatedAt: serverTimestamp(),
+  })
 }
