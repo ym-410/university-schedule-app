@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+# 大学予定管理アプリ (Uni Schedule)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+時間割形式で大学の予定を管理するWebアプリケーションです。月曜～金曜、1限～7限の時間割をタイル形式で表示し、各コマの予定を記録・管理できます。
 
-Currently, two official plugins are available:
+## 📋 主な機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **時間割表示**: 月曜～金曜、1限～7限のグリッド形式で予定を一覧表示
+- **予定管理**: 各コマの予定名、場所、メモを入力・編集・削除
+- **データ永続化**: ローカルストレージにデータを自動保存
+- **クラウド同期**: Firebaseを使用したGoogle認証とデータクラウド同期
+- **データインポート/エクスポート**: JSON形式でのデータ出入力
+- **PWA対応**: ホーム画面にインストール可能
 
-## React Compiler
+## 🛠️ 技術スタック
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **フロントエンド**: React 19 + TypeScript
+- **ビルドツール**: Vite
+- **バックエンド**: Firebase (認証・Firestore)
+- **スタイル**: CSS
+- **開発ツール**: ESLint, TypeScript
 
-## Expanding the ESLint configuration
+## 🚀 セットアップ
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 前提条件
+- Node.js 16以上
+- npm または yarn
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### インストール
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# 依存パッケージのインストール
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 開発サーバーの起動
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+ブラウザで `http://localhost:5173` を開くと、アプリが起動します。
+
+## 📦 ビルド
+
+本番環境用のビルドを生成します：
+
+```bash
+npm run build
+```
+
+ビルド結果は `dist/` ディレクトリに出力されます。
+
+## 🔍 その他のコマンド
+
+```bash
+# プレビューサーバーの起動（ビルド後の確認用）
+npm run preview
+
+# ESLintで構文チェック
+npm run lint
+```
+
+## 📁 プロジェクト構成
+
+```
+src/
+├── components/          # Reactコンポーネント
+│   ├── ScheduleGrid.tsx  # 時間割表示コンポーネント
+│   └── DetailPanel.tsx   # 詳細編集パネル
+├── bin/                 # ユーティリティ関数
+│   ├── firebase.ts       # Firebase設定
+│   └── aut.ts            # 認証処理
+├── utils/               # ヘルパー関数
+│   ├── scheduleStorage.ts # ローカルストレージ操作
+│   └── scheduleCloud.ts   # クラウド同期操作
+├── constants/           # 定数定義
+│   └── schedule.ts       # スケジュール関連定数
+├── types/               # TypeScript型定義
+│   └── schedule.ts       # スケジュール関連型
+├── App.tsx              # ルートコンポーネント
+└── main.tsx             # エントリーポイント
+```
+
+## 📝 使い方
+
+1. **予定の登録**: グリッド内の任意のコマをタップ
+2. **詳細画面で入力**: 予定名、場所、メモを入力
+3. **保存**: 保存ボタンをクリック
+4. **確認**: メイン画面に自動反映
+
+## 🔐 Firebaseセットアップ
+
+クラウド同期を使用する場合、`src/bin/firebase.ts` でFirebaseプロジェクト設定を行ってください。
+
